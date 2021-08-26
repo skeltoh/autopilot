@@ -49,7 +49,7 @@ SCRIPTS = odict({
         'text': 'install system packages necessary for autopilot Pilots? (required if they arent already)',
         'commands': [
             "sudo apt-get update",
-            "sudo apt-get install -y build-essential cmake git python3-dev libatlas-base-dev libsamplerate0-dev libsndfile1-dev libreadline-dev libasound-dev i2c-tools libportmidi-dev liblo-dev libhdf5-dev libzmq-dev libffi-dev",
+            "sudo apt-get install -y build-essential cmake git python3-dev libatlas-base-dev libsamplerate0-dev libsndfile1-dev libreadline-dev libasound-dev i2c-tools libportmidi-dev liblo-dev libhdf5-dev libzmq-dev libffi-dev libprotobuf-dev libgoogle-glog-dev ",
         ]
     },
     'env_terminal': {
@@ -107,7 +107,7 @@ SCRIPTS = odict({
         'type': 'bool',
         'text': 'Disable Bluetooth? (recommended unless you\'re using it <3',
         'commands': [
-            'sudo sed - i \'$s/$/\ndtoverlay=pi3-disable-bt/\' /boot/config.txt',
+            'echo \'dtoverlay=pi3-disable-bt\' | sudo tee -a /boot/config.txt',
             'sudo systemctl disable hciuart.service',
             'sudo systemctl disable bluealsa.service',
             'sudo systemctl disable bluetooth.service'
@@ -146,23 +146,29 @@ SCRIPTS = odict({
         'type': 'bool',
         'text': 'Install OpenCV from source, including performance enhancements for ARM processors (takes awhile)',
         'commands': [
-            "sudo apt-get install -y build-essential cmake ccache unzip pkg-config libjpeg-dev libpng-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev ffmpeg libgtk-3-dev libcanberra-gtk* libatlas-base-dev gfortran python2-dev python-numpy",
-            "git clone https://github.com/opencv/opencv.git",
+            "sudo apt-get install -y python3-dev python3-numpy python3-pip build-essential cmake ccache unzip pkg-config libjpeg-dev libpng-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev v4l-utils libxvidcore-dev libx264-dev ffmpeg libgtk2.0-dev libgtk-3-dev libcanberra-gtk* libatlas-base-dev gfortran python2-dev python-numpy libtbb2 libtbb-dev libdc1394-22-dev libopenblas-dev libatlas-base-dev libblas-dev liblapack-dev libgflags-dev protobuf-compiler",
+            "mkdir -p git",
+            "cd git",
+            "git clone https://github.com/opencv/opencv.git --branch 4.5.3",
             "git clone https://github.com/opencv/opencv_contrib",
             "cd opencv",
             "mkdir build",
             "cd build",
             "cmake -D CMAKE_BUILD_TYPE=RELEASE \
                 -D CMAKE_INSTALL_PREFIX=/usr/local \
-                -D OPENCV_EXTRA_MODULES_PATH=/home/pi/git/opencv_contrib/modules \
+                -D OPENCV_EXTRA_MODULES_PATH=~/git/opencv_contrib/modules \
                 -D BUILD_TESTS=OFF \
                 -D BUILD_PERF_TESTS=OFF \
                 -D BUILD_DOCS=OFF \
                 -D WITH_TBB=ON \
+                -D BUILD_TBB=ON \
                 -D CMAKE_CXX_FLAGS=\"-DTBB_USE_GCC_BUILTINS=1 -D__TBB_64BIT_ATOMICS=0\" \
                 -D WITH_OPENMP=ON \
                 -D WITH_IPP=OFF \
                 -D WITH_OPENCL=ON \
+                -D BUILD_ZLIB=ON \
+                -D BUILD_TIFF=ON \
+                -D WITH_FFMPEG=ON \
                 -D WITH_V4L=ON \
                 -D WITH_LIBV4L=ON \
                 -D ENABLE_NEON=ON \
@@ -190,9 +196,9 @@ SCRIPTS = odict({
         'type': 'bool',
         'text': 'Do performance enhancements for video - mods to uvcvideo and increasing usbfs',
         'commands': [
-            "sudo sh -c 'echo options uvcvideo nodrop=1 timeout=10000 quirks=0x80 > /etc/modprobe.d/uvcvideo.conf'",
             "sudo rmmod uvcvideo",
             "sudo modprobe uvcvideo",
+            "sudo sh -c 'echo options uvcvideo nodrop=1 timeout=10000 quirks=0x80 > /etc/modprobe.d/uvcvideo.conf'",
             "sudo sed -i \"/^exit 0/i sudo sh -c 'echo ${usbfs_size} > /sys/module/usbcore/parameters/usbfs_memory_mb'\" /etc/rc.local"
         ],
     },
