@@ -109,7 +109,6 @@ SCRIPTS = odict({
         'commands': [
             'echo \'dtoverlay=pi3-disable-bt\' | sudo tee -a /boot/config.txt',
             'sudo systemctl disable hciuart.service',
-            'sudo systemctl disable bluealsa.service',
             'sudo systemctl disable bluetooth.service'
         ],
     },
