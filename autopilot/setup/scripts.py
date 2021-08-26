@@ -228,8 +228,8 @@ SCRIPTS = odict({
         'text': 'Enable i2c and set baudrate to 100kHz',
         'commands': [
             'sudo sed -i \'s/^#dtparam=i2c_arm=on/dtparam=i2c_arm=on/g\' /boot/config.txt',
-            'sudo sed -i \'$s/$/\ni2c_arm_baudrate=100000/\' /boot/config.txt',
-            'sudo sed -i \'$s/$/\ni2c-dev/\' /etc/modules',
+            'echo \'ni2c_arm_baudrate=100000\' | sudo tee -a /boot/config.txt',
+            'echo \'i2c-dev\' | sudo tee -a /etc/modules',
             'sudo dtparam i2c_arm=on',
             'sudo modprobe i2c-dev'
         ]
