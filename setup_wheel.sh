@@ -21,6 +21,8 @@ pip3 install virtualenv
 mkdir ~/.venv
 python3 -m virtualenv ~/.venv/autopilot
 source ~/.venv/autopilot/bin/activate
+git config --global user.name "Henry"
+git config --global user.email "hskelto@emory.edu"
 mkdir git
 cd git
 git clone https://github.com/skeltoh/autopilot.git
