@@ -195,7 +195,7 @@ SCRIPTS = odict({
         'type': 'bool',
         'text': 'Do performance enhancements for video - mods to uvcvideo and increasing usbfs',
         'commands': [
-            "sudo rmmod uvcvideo",
+            "sudo modprobe -r uvcvideo",
             "sudo modprobe uvcvideo",
             "sudo sh -c 'echo options uvcvideo nodrop=1 timeout=10000 quirks=0x80 > /etc/modprobe.d/uvcvideo.conf'",
             "sudo sed -i \"/^exit 0/i sudo sh -c 'echo ${usbfs_size} > /sys/module/usbcore/parameters/usbfs_memory_mb'\" /etc/rc.local"

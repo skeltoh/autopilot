@@ -16,11 +16,13 @@ sudo apt install -y \
     libzmq-dev \
     libffi-dev
 
-
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.7 2
 pip3 install virtualenv
 mkdir ~/.venv
 python3 -m virtualenv ~/.venv/autopilot
 source ~/.venv/autopilot/bin/activate
+echo "source ~/.venv/autopilot/bin/activate" >> ~/.bashrc 
+
 git config --global user.name "Henry"
 git config --global user.email "hskelto@emory.edu"
 mkdir git
