@@ -306,11 +306,10 @@ class Spheroid(Transform):
 
             # fit our object (need >>1 sample)
             >>> sphere.fit(readings)
-            
+
             # transform to proper gravity
             >>> sphere.process(readings)
             [0., 0., 9.8]
-
 
     Args:
         target (tuple): parameterization of spheroid to transform to, if none is passed, transform to unit circle
